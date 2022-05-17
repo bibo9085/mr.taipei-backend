@@ -212,4 +212,4 @@ def pathdraw():
 
 
 
-app.run()
+app.run(debug=True, host='140.131.114.159', port=3000, processes=1)
