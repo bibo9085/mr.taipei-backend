@@ -48,6 +48,40 @@ def getSpotPosition(stationName):
         spotBranch_list.append(row_dict)
         # print(spotBranch_list)
     return spotPosition_list, spotFull_list, spotBranch_list
-
-app.run
-
+def dijkstra(mat,begin,end):
+    n = len(mat)
+    parent = []       #用妤紀錄每个结點的父輩结點    
+    collected = []      #用妤紀錄是否經過該结點    
+    distTo = mat[begin]       #用妤紀錄該點到begin结點路徑長度,初始值存所有點到起始點距離   
+    path = []       #用妤紀錄路径
+    for i in range(0,n):        #初始化工作        
+        if i == begin:            
+            collected.append(True)     #所有结點均未被收集        
+        else:            
+            collected.append(False)        
+        parent.append(-1)       #均不存在父輩結點    
+    while True:        
+        if collected[end]==True:            
+            break        
+        min_n = x        
+        for i in range(0,n):            
+            if collected[i]==False:                
+                if distTo[i] < min_n:       #代表頭結點
+                    min_n = distTo[i]                    
+                    v = i    
+        collected[v] = True 
+        for i in range (0,n):    
+            if (collected[i]==False) and (distTo[v] + mat[v][i] <= distTo[i]):     #更新最短距离 ？？GET重複值時進不去該判斷             
+                parent[i] = v
+                distTo[i] = distTo[v] + mat[v][i]
+    e = end    
+    while e != -1:      #利用parent-v繼承關係，循環回朔更新path並輸出        		
+        path.append(e)  
+        e = parent[e]    
+    path.append(begin)                     
+    path.reverse()    
+    
+    # print("path: ",path)    
+    # print("distance: ",distTo[end])
+    path.append(distTo[end])
+    return  path
