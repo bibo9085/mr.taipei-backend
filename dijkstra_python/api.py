@@ -134,4 +134,49 @@ def getDestiStationPath(spotFull_list, destiTrainHeadto, inCarNumber, endPoint):
             break
         endPointOrder+=1
     return inCarNumberCount, endPointOrder
+@app.route('/spotPositionALL', methods=['GET'])
+def spotPosition_ALL():
+    if 'startStation' in request.args:
+        startStation = request.args.get('startStation', None)
+    else:
+        return "Error: No position provided. Please specify another."
+    spotFull_list = getSpotPosition(startStation)
+    return jsonify(spotFull_list)
+
+@app.route('/spotBranchALL', methods=['GET'])
+def spotBranch_ALL():
+    if 'startStation' in request.args:
+        startStation = request.args.get('startStation', None)
+    else:
+        return "Error: No position provided. Please specify another."
+    spotBranch_list = getSpotPosition(startStation)
+    return jsonify(spotBranch_list)
+    
+
+@app.route('/pathdraw', methods=['GET']) 
+def pathdraw():
+    if 'startPoint' in request.args:
+        startPoint = request.args.get('startPoint', None)
+    if 'startStation' in request.args:
+        startStation = request.args.get('startStation', None)
+    if 'endPoint' in request.args:
+        endPoint = request.args.get('endPoint', None)
+    if 'transferStation' in request.args:
+        transferStation = request.args.get('transferStation', None)
+    if 'destiStation' in request.args:
+        destiStation = request.args.get('destiStation', None)
+    if 'startTrainHeadto' in request.args:
+        startTrainHeadto = request.args.get('startTrainHeadto', None)
+    if 'destiTrainHeadto' in request.args:
+        destiTrainHeadto = request.args.get('destiTrainHeadto', None)
+    if 'imgNum' in request.args:
+        imgNum = request.args.get('imgNum', None)
+    else:
+        return "Error: No position provided. Please specify another."
+    
+    spotPosition_list, spotFull_list, spotBranch_list = getSpotPosition(startStation)
+    pathStartStation, inCarNumber = getStartStationPath(startPoint, startTrainHeadto, destiTrainHeadto, spotFull_list, spotBranch_list, getPathCount=0)
+    response = drawPath(spotPosition_list, pathStartStation, startStation)
+    imgList = []
+    imgList.append(response)
 app.run()
