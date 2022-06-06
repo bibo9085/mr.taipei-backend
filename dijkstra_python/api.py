@@ -85,3 +85,39 @@ def dijkstra(mat,begin,end):
     # print("distance: ",distTo[end])
     path.append(distTo[end])
     return  path
+def getStartStationPath(startPoint, startTrainHeadto, destiTrainHeadto, spotFull_list, spotBranch_list, getPathCount):
+    # 入口是在矩陣中第幾個
+    startPoint_order = 0
+    if(getPathCount == 0):
+        destination = startTrainHeadto
+        for startSpot in spotFull_list:
+            if startSpot['position'] == startPoint:
+                break
+            startPoint_order+=1
+    elif(getPathCount == 1):
+        destination = destiTrainHeadto
+        for startSpot in spotFull_list:
+            if startTrainHeadto in startSpot['position']:
+                if startPoint in startSpot['position']:
+                    break
+            startPoint_order+=1
+        
+    endPoint_order = []
+    count = 0
+    # 在正確月台的列車有哪些
+    for endSpot in spotFull_list:
+        if destination in endSpot['position']:
+            endPoint_order.append(count)
+        count +=1
+    shortPath = []
+    endPoint_results = []
+    path = []
+    # 計算入口雨正確列車哪節車廂最近，並輸出路徑
+    for i in endPoint_order:
+       endPoint_results.append(dijkstra(mat = spotBranch_list,begin = startPoint_order,end = i))
+    for j in range(len(endPoint_results)):
+        path.append(endPoint_results[j][:-1])
+        shortPath.append(endPoint_results[j][-1])
+    indexMinPath = shortPath.index(min(shortPath))
+    return path[indexMinPath], spotFull_list[indexMinPath]['position']
+app.run()
