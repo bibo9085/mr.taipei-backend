@@ -120,4 +120,18 @@ def getStartStationPath(startPoint, startTrainHeadto, destiTrainHeadto, spotFull
         shortPath.append(endPoint_results[j][-1])
     indexMinPath = shortPath.index(min(shortPath))
     return path[indexMinPath], spotFull_list[indexMinPath]['position']
+def getDestiStationPath(spotFull_list, destiTrainHeadto, inCarNumber, endPoint):
+    inCarNumberCount = 0
+    # 在正確月台的列車有哪些
+    for endSpot in spotFull_list:
+        if destiTrainHeadto in endSpot['position']:
+            if inCarNumber[0:4] in endSpot['position']:
+                break
+        inCarNumberCount += 1
+    endPointOrder = 0
+    for Spot in spotFull_list:
+        if Spot['position'] == endPoint:
+            break
+        endPointOrder+=1
+    return inCarNumberCount, endPointOrder
 app.run()
