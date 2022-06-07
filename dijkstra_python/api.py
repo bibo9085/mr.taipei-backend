@@ -134,6 +134,23 @@ def getDestiStationPath(spotFull_list, destiTrainHeadto, inCarNumber, endPoint):
             break
         endPointOrder+=1
     return inCarNumberCount, endPointOrder
+def drawPath(spotPosition, path, stationName):   #繪製路徑
+    spotpath = []
+    for i in range(len(path)):
+        spotpath.append(spotPosition[path[i]])
+    finalPath = np.array(spotpath, np.int32)
+    # print(finalPath[-1])
+    stationMap_img = cv2.imread('stationMap/stationMap_'+ stationName +'.jpg')
+    red_color = (0, 0, 255)
+    cv2.polylines(stationMap_img, pts=[finalPath], isClosed=False, color=red_color, thickness=20)
+    cv2.circle(img=stationMap_img, center = (finalPath[0][0],finalPath[0][1]), radius =70, color =(64, 172, 53), thickness=-1)
+    cv2.circle(img=stationMap_img, center = (finalPath[-1][0],finalPath[-1][1]), radius =70, color =(164, 172, 53), thickness=-1)
+    # cv2.imshow('image',stationMap_img)
+    cv2.imwrite('stationPath.png', stationMap_img)  #儲存圖片
+    etval, buffer = cv2.imencode('.png', stationMap_img)
+    response = make_response(buffer.tobytes())
+    response.headers['Content-Type'] = 'image/png'
+    return response
 @app.route('/spotPositionALL', methods=['GET'])
 def spotPosition_ALL():
     if 'startStation' in request.args:
