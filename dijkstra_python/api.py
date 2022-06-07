@@ -170,7 +170,7 @@ def spotBranch_ALL():
     return jsonify(spotBranch_list)
     
 
-@app.route('/pathdraw', methods=['GET']) 
+@app.route('/python/pathdraw', methods=['GET'])
 def pathdraw():
     if 'startPoint' in request.args:
         startPoint = request.args.get('startPoint', None)
@@ -196,4 +196,4 @@ def pathdraw():
     response = drawPath(spotPosition_list, pathStartStation, startStation)
     imgList = []
     imgList.append(response)
-app.run()
+app.run(debug=True, host='127.0.0.1', port=3000)
